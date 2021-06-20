@@ -1,0 +1,32 @@
+version: "3.3"
+volumes:
+  database:
+services:
+  trip_service_database:
+    build:
+      context: ./../..
+      dockerfile: ./docker/dev/trip-service-database/Dockerfile
+    volumes:
+      - database:/var/lib/mysql
+    ports:
+      - 3306:3306
+    env_file:
+      - trip-service-database/.secret.env
+  trip_service:
+    build:
+      context: ./../..
+      dockerfile: ./docker/dev/trip-service/Dockerfile
+    volumes:
+      - ./../..:/service
+    depends_on:
+      - trip_service_database
+  trip_service_http_server:
+    build:
+      context: ./../..
+      dockerfile: ./docker/dev/trip-service-http-server/Dockerfile
+    volumes:
+      - ./../..:/service
+    ports:
+      - 8081:80
+    depends_on:
+      - trip_service
