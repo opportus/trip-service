@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-use DateTime;
+use App\Entity\Spec\PlaneTripStepSpec;
+use App\Exception\InvalidArgumentException;
+use App\Utils\UuidGenerator\UuidGeneratorException;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,37 +36,34 @@ class PlaneTripStep extends TripStep
     private string $baggageDrop;
 
     /**
-     * @inheritdoc
-     *
-     * @param string $seat
-     * @param string $gate
-     * @param string $baggageDrop
+     * @param PlaneTripStepSpec $spec
+     * @throws UuidGeneratorException
+     * @throws InvalidArgumentException
      */
-    public function __construct(
-        Trip $trip,
-        int $number,
-        string $transportNumber,
-        string $departure,
-        string $arrival,
-        DateTime $departureDatetime,
-        DateTime $arrivalDatetime,
-        string $seat = '',
-        string $gate = '',
-        string $baggageDrop = ''
-    ) {
-        parent::__construct(
-            $trip,
-            $number,
-            $transportNumber,
-            $departure,
-            $arrival,
-            $departureDatetime,
-            $arrivalDatetime
-        );
+    public function __construct(PlaneTripStepSpec $spec)
+    {
+        parent::__construct();
 
-        $this->seat = $seat;
-        $this->gate = $gate;
-        $this->baggageDrop = $baggageDrop;
+        if (null === $spec->getTrip()) {
+            throw new InvalidArgumentException(
+                1,
+                \sprintf(
+                    'Expecting an instance of %s in %s, got null',
+                    Trip::class,
+                    PlaneTripStepSpec::class
+                )
+            );
+        }
+
+        $this->transportNumber = $spec->getTransportNumber();
+        $this->departure = $spec->getDeparture();
+        $this->arrival = $spec->getArrival();
+        $this->departureDatetime = $spec->getDepartureDatetime();
+        $this->arrivalDatetime = $spec->getArrivalDatetime();
+        $this->seat = $spec->getSeat();
+        $this->gate = $spec->getGate();
+        $this->baggageDrop = $spec->getBaggageDrop();
+        $this->trip = $spec->getTrip();
     }
 
     /**

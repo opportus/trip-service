@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @package App\Entity
- *
  * @ORM\MappedSuperclass()
  * @ORM\Table(indexes={
  *   @ORM\Index(columns={"type"}),
@@ -35,13 +34,6 @@ abstract class TripStep
      * @ORM\Column(length=25)
      */
     protected string $type;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column()
-     */
-    protected int $number;
 
     /**
      * @var string
@@ -83,7 +75,7 @@ abstract class TripStep
      *
      * @ORM\Column()
      */
-    private DateTime $creationDatetime;
+    protected DateTime $creationDatetime;
 
     /**
      * @var Trip
@@ -94,33 +86,12 @@ abstract class TripStep
     protected Trip $trip;
 
     /**
-     * @param Trip     $trip
-     * @param int      $number
-     * @param string   $transportNumber
-     * @param string   $departure
-     * @param string   $arrival
-     * @param DateTime $departureDatetime
-     * @param DateTime $arrivalDatetime
      * @throws UuidGeneratorException
      */
-    public function __construct(
-        Trip $trip,
-        int $number,
-        string $transportNumber,
-        string $departure,
-        string $arrival,
-        DateTime $departureDatetime,
-        DateTime $arrivalDatetime
-    ) {
+    public function __construct()
+    {
         $this->id = UuidGenerator::generateUuid();
         $this->type = $this->getType();
-        $this->trip = $trip;
-        $this->number = $number;
-        $this->transportNumber = $transportNumber;
-        $this->departure = $departure;
-        $this->arrival = $arrival;
-        $this->departureDatetime = $departureDatetime;
-        $this->arrivalDatetime = $arrivalDatetime;
         $this->creationDatetime = new DateTime();
     }
 
@@ -136,14 +107,6 @@ abstract class TripStep
      * @return string
      */
     abstract public function getType(): string;
-
-    /**
-     * @return int
-     */
-    public function getNumber(): int
-    {
-        return $this->number;
-    }
 
     /**
      * @return string

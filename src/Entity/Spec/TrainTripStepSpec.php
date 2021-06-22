@@ -17,46 +17,46 @@ class TrainTripStepSpec extends TripStepSpec
     private string $seat;
 
     /**
-     * @inheritdoc
-     *
-     * @param string $seat
+     * @param string    $transportNumber
+     * @param string    $departure
+     * @param string    $arrival
+     * @param DateTime  $departureDatetime
+     * @param DateTime  $arrivalDatetime
+     * @param string    $seat
+     * @param null|Trip $trip
      */
     public function __construct(
-        int $number,
         string $transportNumber,
         string $departure,
         string $arrival,
         DateTime $departureDatetime,
         DateTime $arrivalDatetime,
-        string $seat = ''
+        string $seat = '',
+        ?Trip $trip = null
     ) {
-        parent::__construct(
-            $number,
-            $transportNumber,
-            $departure,
-            $arrival,
-            $departureDatetime,
-            $arrivalDatetime
-        );
-
+        $this->transportNumber = $transportNumber;
+        $this->departure = $departure;
+        $this->arrival = $arrival;
+        $this->departureDatetime = $departureDatetime;
+        $this->arrivalDatetime = $arrivalDatetime;
         $this->seat = $seat;
+        $this->trip = $trip;
     }
 
     /**
      * @inheritdoc
      */
-    public function createTripStep(Trip $trip): TrainTripStep
+    public function create(Trip $trip): TrainTripStep
     {
-        return new TrainTripStep(
-            $trip,
-            $this->number,
+        return new TrainTripStep(new self(
             $this->transportNumber,
             $this->departure,
             $this->arrival,
             $this->departureDatetime,
             $this->arrivalDatetime,
-            $this->seat
-        );
+            $this->seat,
+            $trip
+        ));
     }
 
     /**

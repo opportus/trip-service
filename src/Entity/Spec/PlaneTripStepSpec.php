@@ -27,14 +27,17 @@ class PlaneTripStepSpec extends TripStepSpec
     private string $baggageDrop;
 
     /**
-     * @inheritdoc
-     *
-     * @param string $seat
-     * @param string $gate
-     * @param string $baggageDrop
+     * @param string    $transportNumber
+     * @param string    $departure
+     * @param string    $arrival
+     * @param DateTime  $departureDatetime
+     * @param DateTime  $arrivalDatetime
+     * @param string    $seat
+     * @param string    $gate
+     * @param string    $baggageDrop
+     * @param null|Trip $trip
      */
     public function __construct(
-        int $number,
         string $transportNumber,
         string $departure,
         string $arrival,
@@ -42,30 +45,26 @@ class PlaneTripStepSpec extends TripStepSpec
         DateTime $arrivalDatetime,
         string $seat = '',
         string $gate = '',
-        string $baggageDrop = ''
+        string $baggageDrop = '',
+        ?Trip $trip = null
     ) {
-        parent::__construct(
-            $number,
-            $transportNumber,
-            $departure,
-            $arrival,
-            $departureDatetime,
-            $arrivalDatetime
-        );
-
+        $this->transportNumber = $transportNumber;
+        $this->departure = $departure;
+        $this->arrival = $arrival;
+        $this->departureDatetime = $departureDatetime;
+        $this->arrivalDatetime = $arrivalDatetime;
         $this->seat = $seat;
         $this->gate = $gate;
         $this->baggageDrop = $baggageDrop;
+        $this->trip = $trip;
     }
 
     /**
      * @inheritdoc
      */
-    public function createTripStep(Trip $trip): PlaneTripStep
+    public function create(Trip $trip): PlaneTripStep
     {
-        return new PlaneTripStep(
-            $trip,
-            $this->number,
+        return new PlaneTripStep(new self(
             $this->transportNumber,
             $this->departure,
             $this->arrival,
@@ -73,9 +72,11 @@ class PlaneTripStepSpec extends TripStepSpec
             $this->arrivalDatetime,
             $this->seat,
             $this->gate,
-            $this->baggageDrop
-        );
+            $this->baggageDrop,
+            $trip
+        ));
     }
+
 
     /**
      * @inheritdoc

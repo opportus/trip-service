@@ -17,11 +17,6 @@ abstract class TripStepSpec
     protected string $type;
 
     /**
-     * @var int
-     */
-    protected int $number;
-
-    /**
      * @var string
      */
     protected string $transportNumber;
@@ -47,48 +42,20 @@ abstract class TripStepSpec
     protected DateTime $arrivalDatetime;
 
     /**
-     * @param int      $number
-     * @param string   $transportNumber
-     * @param string   $departure
-     * @param string   $arrival
-     * @param DateTime $departureDatetime
-     * @param DateTime $arrivalDatetime
+     * @var null|Trip
      */
-    public function __construct(
-        int $number,
-        string $transportNumber,
-        string $departure,
-        string $arrival,
-        DateTime $departureDatetime,
-        DateTime $arrivalDatetime
-    ) {
-        $this->type = $this->getType();
-        $this->number = $number;
-        $this->transportNumber = $transportNumber;
-        $this->departure = $departure;
-        $this->arrival = $arrival;
-        $this->departureDatetime = $departureDatetime;
-        $this->arrivalDatetime = $arrivalDatetime;
-    }
+    protected ?Trip $trip;
 
     /**
      * @param Trip $trip
      * @return TripStep
      */
-    abstract public function createTripStep(Trip $trip): TripStep;
+    abstract public function create(Trip $trip): TripStep;
 
     /**
      * @return string
      */
     abstract public function getType(): string;
-
-    /**
-     * @return int
-     */
-    public function getNumber(): int
-    {
-        return $this->number;
-    }
 
     /**
      * @return string
@@ -128,5 +95,13 @@ abstract class TripStepSpec
     public function getArrivalDatetime(): DateTime
     {
         return $this->arrivalDatetime;
+    }
+
+    /**
+     * @return null|Trip
+     */
+    public function getTrip(): ?Trip
+    {
+        return $this->trip;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-use DateTime;
+use App\Entity\Spec\TrainTripStepSpec;
+use App\Exception\InvalidArgumentException;
+use App\Utils\UuidGenerator\UuidGeneratorException;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,31 +22,32 @@ class TrainTripStep extends TripStep
     private string $seat;
 
     /**
-     * @inheritdoc
-     *
-     * @param string $seat
+     * @param TrainTripStepSpec $spec
+     * @throws UuidGeneratorException
+     * @throws InvalidArgumentException
      */
-    public function __construct(
-        Trip $trip,
-        int $number,
-        string $transportNumber,
-        string $departure,
-        string $arrival,
-        DateTime $departureDatetime,
-        DateTime $arrivalDatetime,
-        string $seat = ''
-    ) {
-        parent::__construct(
-            $trip,
-            $number,
-            $transportNumber,
-            $departure,
-            $arrival,
-            $departureDatetime,
-            $arrivalDatetime
-        );
+    public function __construct(TrainTripStepSpec $spec)
+    {
+        parent::__construct();
 
-        $this->seat = $seat;
+        if (null === $spec->getTrip()) {
+            throw new InvalidArgumentException(
+                1,
+                \sprintf(
+                    'Expecting an instance of %s in %s, got null',
+                    Trip::class,
+                    TrainTripStepSpec::class
+                )
+            );
+        }
+
+        $this->transportNumber = $spec->getTransportNumber();
+        $this->departure = $spec->getDeparture();
+        $this->arrival = $spec->getArrival();
+        $this->departureDatetime = $spec->getDepartureDatetime();
+        $this->arrivalDatetime = $spec->getArrivalDatetime();
+        $this->seat = $spec->getSeat();
+        $this->trip = $spec->getTrip();
     }
 
     /**
