@@ -55,7 +55,10 @@ abstract class TripStepSpec
     /**
      * @return string
      */
-    abstract public function getType(): string;
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
     /**
      * @return string

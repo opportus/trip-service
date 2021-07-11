@@ -34,6 +34,7 @@ class TrainTripStepSpec extends TripStepSpec
         string $seat = '',
         ?Trip $trip = null
     ) {
+        $this->type = 'train';
         $this->transportNumber = $transportNumber;
         $this->departure = $departure;
         $this->arrival = $arrival;
@@ -57,14 +58,6 @@ class TrainTripStepSpec extends TripStepSpec
             $this->seat,
             $trip
         ));
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getType(): string
-    {
-        return 'train';
     }
 
     /**

@@ -48,6 +48,7 @@ class PlaneTripStepSpec extends TripStepSpec
         string $baggageDrop = '',
         ?Trip $trip = null
     ) {
+        $this->type = 'plane';
         $this->transportNumber = $transportNumber;
         $this->departure = $departure;
         $this->arrival = $arrival;
@@ -75,15 +76,6 @@ class PlaneTripStepSpec extends TripStepSpec
             $this->baggageDrop,
             $trip
         ));
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function getType(): string
-    {
-        return 'plane';
     }
 
     /**
