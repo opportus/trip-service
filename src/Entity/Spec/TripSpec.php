@@ -32,7 +32,7 @@ class TripSpec
      * @return Trip
      * @throws UuidGeneratorException
      */
-    public function create(): Trip
+    public function createTrip(): Trip
     {
         return new Trip($this);
     }
