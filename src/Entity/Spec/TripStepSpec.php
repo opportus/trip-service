@@ -50,7 +50,7 @@ abstract class TripStepSpec
      * @param Trip $trip
      * @return TripStep
      */
-    abstract public function create(Trip $trip): TripStep;
+    abstract public function createTripStep(Trip $trip): TripStep;
 
     /**
      * @return string

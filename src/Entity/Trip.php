@@ -54,7 +54,7 @@ class Trip
 
         /** @var TripStepSpec $stepSpec */
         foreach ($spec->getStepSpecs() as $stepSpec) {
-            $steps[] = $stepSpec->create($this);
+            $steps[] = $stepSpec->createTripStep($this);
         }
 
         $steps = new ArrayCollection($steps);

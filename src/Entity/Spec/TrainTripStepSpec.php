@@ -47,7 +47,7 @@ class TrainTripStepSpec extends TripStepSpec
     /**
      * @inheritdoc
      */
-    public function create(Trip $trip): TrainTripStep
+    public function createTripStep(Trip $trip): TrainTripStep
     {
         return new TrainTripStep(new self(
             $this->transportNumber,
