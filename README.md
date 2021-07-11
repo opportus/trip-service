@@ -15,20 +15,9 @@ Requires:
 - Git
 - Composer
 - Docker
-- Open and free 8080,8081,3306 ports on the dev environment to allow the 2 services below to communicate
+- Open and free 8081,3306 ports on the dev environment to allow the 2 services below to communicate
 
-Open a terminal and setup the existing [LinkerService](https://github.com/opportus/linker-service) which the
-TripService depends on to link its trip steps:
-
-```shell
-git clone git@github.com:opportus/linker-service.git
-cd linker-service
-composer install --ignore-platform-reqs
-
-sudo docker-compose --file docker/dev/docker-compose.yaml up
-```
-
-Then open a new terminal and setup the TripService:
+Open a new terminal and setup the TripService:
 
 ```shell
 git clone git@github.com:opportus/trip-service.git
