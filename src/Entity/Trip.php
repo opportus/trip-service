@@ -11,6 +11,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use SplDoublyLinkedList;
 
 /**
  * The domain aggregate root.
@@ -85,18 +86,13 @@ class Trip
     }
 
     /**
-     * @return string[] an array of TripStep ID
+     * Read only VO Steps, so we can pass them to the aggregate's client relatively safely (enough for a test api)...
+     *
+     * @return array
      */
-    public function getStepIds(): array
+    public function getSteps(): array
     {
-        $steps = [];
-
-        /** @var TripStep $step */
-        foreach ($this->steps as $step) {
-            $steps[] = $step->getId();
-        }
-
-        return $steps;
+        return iterator_to_array($this->buildLinkedStepList($this->steps->toArray()));
     }
 
     /**
@@ -119,5 +115,76 @@ class Trip
         }
 
         return false;
+    }
+
+    /**
+     * @todo Walk list seeking in both directions...
+     *
+     * @param array  $list
+     * @return SplDoublyLinkedList
+     */
+    private function buildLinkedStepList(array $list): SplDoublyLinkedList
+    {
+        $direction = true;
+        $linkedList = new SplDoublyLinkedList();
+        $currentNodeListKey = \array_key_first($list);
+
+        while (!empty($list)) {
+            if (!isset($currentNodeListKey)) {
+                $currentNode = $linkedList->{$this->getUnlinkOperation($direction)}();
+            } else {
+                $currentNode = $list[$currentNodeListKey];
+                unset($list[$currentNodeListKey]);
+            }
+
+            $linkedList->{$this->getLinkOperation($direction)}($currentNode);
+
+            $currentNodeListKey = $this->findLinkedNodeKey($list, $currentNode, $direction);
+
+            if (!isset($currentNodeListKey)) {
+                $direction = !$direction;
+            }
+        }
+
+        $linkedList->rewind();
+
+        return $linkedList;
+    }
+
+    /**
+     * @param array  $list
+     * @param array  $currentNode
+     * @param bool   $direction
+     * @return null|int
+     */
+    private function findLinkedNodeKey(array $list, array $currentNode, bool $direction): ?int
+    {
+        $links = ['departure', 'arrival'];
+
+        foreach ($list as $key => $node) {
+            if ($currentNode[$links[$direction]] === $node[$links[!$direction]]) {
+                return $key;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param bool $direction
+     * @return string
+     */
+    private function getLinkOperation(bool $direction): string
+    {
+        return $direction ? 'unshift' : 'push';
+    }
+
+    /**
+     * @param bool $direction
+     * @return string
+     */
+    private function getUnlinkOperation(bool $direction): string
+    {
+        return $direction ? 'shift' : 'pop';
     }
 }
