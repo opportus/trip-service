@@ -2,6 +2,7 @@
 
 namespace App\Entity\Spec;
 
+use App\Entity\Exception\InvalidTripStepException;
 use App\Entity\PlaneTripStep;
 use App\Entity\Trip;
 use DateTime;
@@ -38,6 +39,7 @@ class PlaneTripStepSpec extends TripStepSpec
      * @param string    $gate
      * @param string    $baggageDrop
      * @param null|Trip $trip
+     * @throws InvalidTripStepException
      */
     public function __construct(
         string $transportNumber,
@@ -50,16 +52,19 @@ class PlaneTripStepSpec extends TripStepSpec
         string $baggageDrop = '',
         ?Trip $trip = null
     ) {
+        parent::__construct(
+            $transportNumber,
+            $departure,
+            $arrival,
+            $departureDatetime,
+            $arrivalDatetime,
+            $trip
+        );
+
         $this->type = self::TYPE;
-        $this->transportNumber = $transportNumber;
-        $this->departure = $departure;
-        $this->arrival = $arrival;
-        $this->departureDatetime = $departureDatetime;
-        $this->arrivalDatetime = $arrivalDatetime;
         $this->seat = $seat;
         $this->gate = $gate;
         $this->baggageDrop = $baggageDrop;
-        $this->trip = $trip;
     }
 
     /**
@@ -102,5 +107,38 @@ class PlaneTripStepSpec extends TripStepSpec
     public function getBaggageDrop(): string
     {
         return $this->baggageDrop;
+    }
+
+    /**
+     * @param string $seat
+     * @return bool
+     */
+    private function isValidSeat(string $seat): bool
+    {
+        $length = \strlen($seat);
+
+        return $length > 0 && $length < 5;
+    }
+
+    /**
+     * @param string $gate
+     * @return bool
+     */
+    private function isValidGate(string $gate): bool
+    {
+        $length = \strlen($gate);
+
+        return $length > 0 && $length < 5;
+    }
+
+    /**
+     * @param string $baggageDrop
+     * @return bool
+     */
+    private function isValidBaggageDrop(string $baggageDrop): bool
+    {
+        $length = \strlen($baggageDrop);
+
+        return $length > 0 && $length < 5;
     }
 }

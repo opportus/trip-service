@@ -2,6 +2,7 @@
 
 namespace App\Entity\Spec;
 
+use App\Entity\Exception\InvalidTripStepException;
 use App\Entity\TrainTripStep;
 use App\Entity\Trip;
 use DateTime;
@@ -26,6 +27,7 @@ class TrainTripStepSpec extends TripStepSpec
      * @param DateTime  $arrivalDatetime
      * @param string    $seat
      * @param null|Trip $trip
+     * @throws InvalidTripStepException
      */
     public function __construct(
         string $transportNumber,
@@ -36,14 +38,17 @@ class TrainTripStepSpec extends TripStepSpec
         string $seat = '',
         ?Trip $trip = null
     ) {
+        parent::__construct(
+            $transportNumber,
+            $departure,
+            $arrival,
+            $departureDatetime,
+            $arrivalDatetime,
+            $trip
+        );
+
         $this->type = self::TYPE;
-        $this->transportNumber = $transportNumber;
-        $this->departure = $departure;
-        $this->arrival = $arrival;
-        $this->departureDatetime = $departureDatetime;
-        $this->arrivalDatetime = $arrivalDatetime;
         $this->seat = $seat;
-        $this->trip = $trip;
     }
 
     /**
@@ -68,5 +73,16 @@ class TrainTripStepSpec extends TripStepSpec
     public function getSeat(): string
     {
         return $this->seat;
+    }
+
+    /**
+     * @param string $seat
+     * @return bool
+     */
+    private function isValidSeat(string $seat): bool
+    {
+        $length = \strlen($seat);
+
+        return $length > 0 && $length < 5;
     }
 }
