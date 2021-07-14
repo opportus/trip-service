@@ -2,7 +2,7 @@
 
 namespace App\Entity\Spec;
 
-use App\Entity\Exception\InvalidTrip;
+use App\Entity\Exception\InvalidTripException;
 use App\Entity\Trip;
 use App\Utils\UuidGenerator\UuidGeneratorException;
 
@@ -18,12 +18,12 @@ class TripSpec
 
     /**
      * @param TripStepSpecCollection $stepSpecs
-     * @throws InvalidTrip
+     * @throws InvalidTripException
      */
     public function __construct(TripStepSpecCollection $stepSpecs)
     {
         if ($this->areThereStepsSharingSameDepartureOrArrival($stepSpecs)) {
-            throw new InvalidTrip(1, 'It is not possible to pass twice in the same city');
+            throw new InvalidTripException(1, 'It is not possible to pass twice in the same city');
         }
 
         $this->stepSpecs = $stepSpecs;

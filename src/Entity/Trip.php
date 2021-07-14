@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Exception\InvalidTrip;
 use App\Entity\Spec\TripSpec;
 use App\Entity\Spec\TripStepSpec;
 use App\Utils\UuidGenerator\UuidGenerator;
@@ -47,7 +46,6 @@ class Trip
     /**
      * @param TripSpec $spec
      * @throws UuidGeneratorException
-     * @throws InvalidTrip
      */
     public function __construct(TripSpec $spec)
     {

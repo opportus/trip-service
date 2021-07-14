@@ -7,6 +7,6 @@ use App\Exception\InvalidArgumentException;
 /**
  * @package App\Entity\Exception
  */
-class InvalidTrip extends InvalidArgumentException
+class InvalidTripException extends InvalidArgumentException
 {
 }
