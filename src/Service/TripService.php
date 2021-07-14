@@ -35,7 +35,7 @@ class TripService implements TripServiceInterface
     public function getTrip(GetTripQueryInterface $query): GetTripQueryReplyInterface
     {
         /** @var Trip $trip */
-        $trip = $this->repository->find($query->getTripId());
+        $trip = $this->repository->get($query->getTripId());
 
         return new GetTripQueryReply($query, $trip);
     }
