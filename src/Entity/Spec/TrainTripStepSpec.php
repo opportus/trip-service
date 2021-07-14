@@ -11,6 +11,8 @@ use DateTime;
  */
 class TrainTripStepSpec extends TripStepSpec
 {
+    private const TYPE = 'train';
+
     /**
      * @var string
      */
@@ -34,7 +36,7 @@ class TrainTripStepSpec extends TripStepSpec
         string $seat = '',
         ?Trip $trip = null
     ) {
-        $this->type = 'train';
+        $this->type = self::TYPE;
         $this->transportNumber = $transportNumber;
         $this->departure = $departure;
         $this->arrival = $arrival;
