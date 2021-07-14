@@ -9,7 +9,7 @@
             "email": "clement.cazaud@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": "7.4.20",
@@ -23,6 +23,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
         "nelmio/cors-bundle": "^2.1",
+        "opportus/object-mapper-bundle": "^1.0@beta",
         "phpdocumentor/reflection-docblock": "^5.2",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
