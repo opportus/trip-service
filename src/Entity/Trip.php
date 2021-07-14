@@ -60,10 +60,6 @@ class Trip
 
         $steps = new ArrayCollection($steps);
 
-        if ($this->areThereStepsSharingSameDepartureOrArrival($steps)) {
-            throw new InvalidTrip(1, 'It is not possible to pass twice in the same city');
-        }
-
         $this->id = UuidGenerator::generateUuid();
         $this->creationDatetime = new DateTime();
         $this->steps = $steps;
@@ -93,28 +89,6 @@ class Trip
     public function getSteps(): array
     {
         return iterator_to_array($this->buildLinkedStepList($this->steps->toArray()));
-    }
-
-    /**
-     * @param ArrayCollection $steps
-     * @return bool
-     */
-    private function areThereStepsSharingSameDepartureOrArrival(ArrayCollection $steps): bool
-    {
-        $departures = [];
-        $arrivals = [];
-
-        /** @var TripStep $step */
-        foreach ($steps as $step) {
-            $departures[$step->getDeparture()] = null;
-            $arrivals[$step->getArrival()] = null;
-        }
-
-        if (\count($steps) !== \count($departures) || \count($steps) !== \count($arrivals)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
