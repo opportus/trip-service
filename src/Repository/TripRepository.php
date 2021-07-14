@@ -23,6 +23,14 @@ class TripRepository extends ServiceEntityRepository implements TripRepositoryIn
     /**
      * @inheritDoc
      */
+    public function get(string $id): ?Trip
+    {
+        return $this->find($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function save(array $trips)
     {
         foreach ($trips as $trip) {

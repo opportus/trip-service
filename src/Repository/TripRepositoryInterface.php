@@ -12,6 +12,12 @@ use Doctrine\Persistence\ObjectRepository;
 interface TripRepositoryInterface extends ServiceEntityRepositoryInterface, ObjectRepository
 {
     /**
+     * @param string $id
+     * @return null|Trip
+     */
+    public function get(string $id): ?Trip;
+
+    /**
      * @param Trip[] $trips
      */
     public function save(array $trips);
