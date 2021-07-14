@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Collection\TripCollection;
 use App\Entity\Trip;
 use App\Repository\Exception\TripRepositoryException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
@@ -20,14 +21,14 @@ interface TripRepositoryInterface extends ServiceEntityRepositoryInterface, Obje
     public function get(string $id): ?Trip;
 
     /**
-     * @param Trip[] $trips
+     * @param TripCollection $trips
      * @throws TripRepositoryException
      */
-    public function save(array $trips);
+    public function save(TripCollection $trips);
 
     /**
-     * @param Trip[] $trips
+     * @param TripCollection $trips
      * @throws TripRepositoryException
      */
-    public function delete(array $trips);
+    public function delete(TripCollection $trips);
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Collection\TripCollection;
 use App\Entity\Trip;
 use App\Repository\Exception\TripRepositoryException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -42,7 +43,7 @@ class TripRepository extends ServiceEntityRepository implements TripRepositoryIn
     /**
      * @inheritDoc
      */
-    public function save(array $trips)
+    public function save(TripCollection $trips)
     {
         try {
             foreach ($trips as $trip) {
@@ -63,7 +64,7 @@ class TripRepository extends ServiceEntityRepository implements TripRepositoryIn
     /**
      * @inheritDoc
      */
-    public function delete(array $trips)
+    public function delete(TripCollection $trips)
     {
         try {
             foreach ($trips as $trip) {

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Collection\TripCollection;
 use App\Entity\Trip;
 use App\Repository\TripRepositoryInterface;
 use App\Service\Message\CreateTripCommandInterface;
@@ -49,7 +50,7 @@ class TripService implements TripServiceInterface
 
         $trip = $tripSpec->createTrip();
 
-        $this->repository->save([$trip]);
+        $this->repository->save(new TripCollection([$trip]));
 
         return new CreateTripCommandReply($command, $trip);
     }
