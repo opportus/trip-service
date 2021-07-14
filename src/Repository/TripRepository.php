@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Trip;
+use App\Repository\Exception\TripRepositoryException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @package App\Repository
@@ -25,7 +27,16 @@ class TripRepository extends ServiceEntityRepository implements TripRepositoryIn
      */
     public function get(string $id): ?Trip
     {
-        return $this->find($id);
+        try {
+            return $this->find($id);
+
+        } catch (Exception $e) {
+            throw new TripRepositoryException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 
     /**
@@ -33,11 +44,20 @@ class TripRepository extends ServiceEntityRepository implements TripRepositoryIn
      */
     public function save(array $trips)
     {
-        foreach ($trips as $trip) {
-            $this->getEntityManager()->persist($trip);
-        }
+        try {
+            foreach ($trips as $trip) {
+                $this->getEntityManager()->persist($trip);
+            }
 
-        $this->getEntityManager()->flush();
+            $this->getEntityManager()->flush();
+
+        } catch (Exception $e) {
+            throw new TripRepositoryException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 
     /**
@@ -45,10 +65,19 @@ class TripRepository extends ServiceEntityRepository implements TripRepositoryIn
      */
     public function delete(array $trips)
     {
-        foreach ($trips as $trip) {
-            $this->getEntityManager()->remove($trip);
-        }
+        try {
+            foreach ($trips as $trip) {
+                $this->getEntityManager()->remove($trip);
+            }
 
-        $this->getEntityManager()->flush();
+            $this->getEntityManager()->flush();
+
+        } catch (Exception $e) {
+            throw new TripRepositoryException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 }
