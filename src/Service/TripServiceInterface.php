@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Entity\Spec\TripStepSpecCollection;
+use App\Service\Exception\TripServiceException;
 use App\Service\Message\CreateTripCommandInterface;
 use App\Service\Message\CreateTripCommandReplyInterface;
 use App\Service\Message\GetTripQueryInterface;
@@ -16,12 +16,14 @@ interface TripServiceInterface
     /**
      * @param GetTripQueryInterface $query
      * @return GetTripQueryReplyInterface
+     * @throws TripServiceException
      */
     public function getTrip(GetTripQueryInterface $query): GetTripQueryReplyInterface;
 
     /**
      * @param CreateTripCommandInterface $command
      * @return CreateTripCommandReplyInterface
+     * @throws TripServiceException
      */
     public function createTrip(CreateTripCommandInterface $command): CreateTripCommandReplyInterface;
 }

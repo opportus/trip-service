@@ -5,12 +5,14 @@ namespace App\Service;
 use App\Entity\Collection\TripCollection;
 use App\Entity\Trip;
 use App\Repository\TripRepositoryInterface;
+use App\Service\Exception\TripServiceException;
 use App\Service\Message\CreateTripCommandInterface;
 use App\Service\Message\CreateTripCommandReply;
 use App\Service\Message\CreateTripCommandReplyInterface;
 use App\Service\Message\GetTripQueryInterface;
 use App\Service\Message\GetTripQueryReply;
 use App\Service\Message\GetTripQueryReplyInterface;
+use Exception;
 
 /**
  * @package App\Service
@@ -35,10 +37,19 @@ class TripService implements TripServiceInterface
      */
     public function getTrip(GetTripQueryInterface $query): GetTripQueryReplyInterface
     {
-        /** @var Trip $trip */
-        $trip = $this->repository->get($query->getTripId());
+        try {
+            /** @var Trip $trip */
+            $trip = $this->repository->get($query->getTripId());
 
-        return new GetTripQueryReply($query, $trip);
+            return new GetTripQueryReply($query, $trip);
+
+        } catch (Exception $e) {
+            throw new TripServiceException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 
     /**
@@ -46,12 +57,21 @@ class TripService implements TripServiceInterface
      */
     public function createTrip(CreateTripCommandInterface $command): CreateTripCommandReplyInterface
     {
-        $tripSpec = $command->getTripSpec();
+        try {
+            $tripSpec = $command->getTripSpec();
 
-        $trip = $tripSpec->createTrip();
+            $trip = $tripSpec->createTrip();
 
-        $this->repository->save(new TripCollection([$trip]));
+            $this->repository->save(new TripCollection([$trip]));
 
-        return new CreateTripCommandReply($command, $trip);
+            return new CreateTripCommandReply($command, $trip);
+
+        } catch (Exception $e) {
+            throw new TripServiceException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 }
