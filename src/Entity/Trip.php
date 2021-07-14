@@ -90,7 +90,7 @@ class Trip
     }
 
     /**
-     * @todo Walk list seeking in both directions...
+     * @todo Walk list seeking in both directions and optimize more generally...
      *
      * @param array  $list
      * @return SplDoublyLinkedList
